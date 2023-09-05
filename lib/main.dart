@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:patterns/pages/create_page.dart';
 import 'package:patterns/pages/home_page.dart';
+import 'package:patterns/pages/update_page.dart';
+
+import 'models/post_model.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,6 +24,11 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const HomePage(),
+      routes: {
+        HomePage.id : (context) =>HomePage(),
+        UpdatePage.id : (context) =>UpdatePage(),
+        CreatePage.id : (context) =>CreatePage()
+      },
     );
   }
 }

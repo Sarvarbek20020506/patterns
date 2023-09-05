@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:http/http.dart';
+import 'package:patterns/pages/create_page.dart';
+import 'package:patterns/pages/update_page.dart';
 
 import '../models/post_model.dart';
 import '../services/http_service.dart';
@@ -41,42 +43,10 @@ void _apiPostDelete(Post post)async{
     setState(() {
       if(response != null){
         _apiPostList();
-        items= Network.parsePostList(response);
       }else{
         items= [];
       }
         isLoading = false;
-    });
-}
-
-void _apiPostCreate(Post post)async{
-  setState(() {
-    isLoading = true;
-  });
-    var response = await Network.POST(Network.API_CREATE, Network.paramsEmpty());
-    setState(() {
-      if(response != null){
-        items= Network.parsePostList(response);
-        _apiPostList();
-      }else{
-        items =[];
-      }
-      isLoading = false;
-    });
-}
-
-void _apiPostUpdate(Post post)async{
-    setState(() {
-      isLoading = true;
-    });
-    var response = await Network.PUT(Network.API_UPDATE, Network.paramsUpdate(post));
-    if(response !=null){
-      _apiPostList();
-    }else{
-
-    }
-    setState(() {
-      isLoading = false;
     });
 }
 
@@ -110,7 +80,8 @@ void _apiPostUpdate(Post post)async{
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-            _apiPostCreate(post as Post);
+
+          Navigator.pushReplacementNamed(context, CreatePage.id);
           },
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
@@ -127,12 +98,13 @@ void _apiPostUpdate(Post post)async{
         motion: const ScrollMotion(),
         dismissible: DismissiblePane(
           onDismissed: (){
-            _apiPostUpdate(post);
+            Navigator.pushReplacementNamed(context, UpdatePage.id);
           },
         ),
         children: [
-          SlidableAction(onPressed: (BuildContext context){},
-          backgroundColor: Colors.green,
+          SlidableAction(
+            onPressed: (BuildContext context) {},
+            backgroundColor: Colors.green,
             foregroundColor: Colors.white,
             icon: Icons.edit,
             label: "Update",

@@ -40,7 +40,7 @@ class Network {
     );
     var response = await post(uri, headers: headers, body: jsonEncode(params));
     LogService.d(response.body);
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode ==201) {
       return response.body;
     } else {
       return null;
@@ -48,10 +48,7 @@ class Network {
   }
 
   static Future<String?> PUT(String api, Map<String, dynamic> params) async {
-    var uri = Uri.https(
-      BASE,
-      api,
-    );
+    var uri = Uri.https(BASE, api,);
     var response = await put(uri, headers: headers, body: jsonEncode(params));
     LogService.d(response.body);
     if (response.statusCode == 200) {
@@ -108,5 +105,16 @@ class Network {
     dynamic json = jsonDecode(response);
     var data = List<Post>.from(json.map((x) => Post.fromJson(x)));
     return data;
+  }
+
+  static List<Post> parsePost(String response) {
+    final List<dynamic> jsonList = jsonDecode(response);
+    final List<Post> posts = [];
+
+    for (var json in jsonList) {
+      posts.add(Post.fromJson(json));
+    }
+
+    return posts;
   }
 }
